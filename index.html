@@ -4,27 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spin & Win | LecToGo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel@master/Winwheel.min.js"></script>
   <style>
     body {
       text-align: center;
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
+      font-family: 'Poppins', Arial, sans-serif;
+      background-color: #f4f7fa;
       margin: 0;
       padding: 0;
     }
     h1 {
-      color: #000;
+      color: #333;
       margin-top: 20px;
     }
     #canvas {
       margin-top: 40px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
       border-radius: 50%;
     }
     .spin-btn {
-      background-color: #002EFF;
+      background-color: #3b82f6;
       color: white;
       padding: 15px 30px;
       border: none;
@@ -33,9 +34,13 @@
       margin-top: 20px;
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.1s;
     }
     .spin-btn:hover {
-      background-color: #001BBB;
+      background-color: #2563eb;
+    }
+    .spin-btn:active {
+      transform: scale(0.95);
     }
     .result {
       margin-top: 20px;
@@ -45,18 +50,18 @@
     .pointer {
       width: 0;
       height: 0;
-      border-left: 20px solid transparent;
-      border-right: 20px solid transparent;
-      border-top: 30px solid #555;
-      margin: 0 auto;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-top: 25px solid #333;
       position: relative;
       top: 45px;
-      filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.4));
+      margin: 0 auto;
+      filter: drop-shadow(0px 3px 3px rgba(0,0,0,0.2));
     }
   </style>
 </head>
 <body>
-  <h1>Snurra & Vinn!</h1>
+  <h1>🎉 Snurra & Vinn!</h1>
   <div class="pointer"></div>
   <canvas id="canvas" width="500" height="500"></canvas><br>
   <button class="spin-btn" onclick="spin()">🎯 Snurra Nu</button>
@@ -64,19 +69,19 @@
 
   <script>
     const segments = [
-      {'fillStyle': '#00C851', 'text': '100 kr', 'size': 2},
-      {'fillStyle': 'gray', 'text': '0 kr'},
-      {'fillStyle': 'blue', 'text': '10 kr'},
-      {'fillStyle': 'gray', 'text': '0 kr'},
-      {'fillStyle': 'blue', 'text': '10 kr'},
-      {'fillStyle': 'gray', 'text': '0 kr'},
-      {'fillStyle': 'orange', 'text': '20 kr'},
-      {'fillStyle': 'gray', 'text': '0 kr'},
-      {'fillStyle': 'blue', 'text': '10 kr'},
-      {'fillStyle': 'gray', 'text': '0 kr'},
-      {'fillStyle': 'blue', 'text': '10 kr'},
-      {'fillStyle': 'gray', 'text': '0 kr'},
-      {'fillStyle': 'blue', 'text': '10 kr'}
+      {'fillStyle': '#ff5252', 'text': '100 kr', 'size': 4},
+      {'fillStyle': '#e0e0e0', 'text': '0 kr', 'size': 65.09},
+      {'fillStyle': '#42a5f5', 'text': '5 kr', 'size': 65.09},
+      {'fillStyle': '#e0e0e0', 'text': '0 kr', 'size': 65.09},
+      {'fillStyle': '#42a5f5', 'text': '5 kr', 'size': 65.09},
+      {'fillStyle': '#e0e0e0', 'text': '0 kr', 'size': 65.09},
+      {'fillStyle': '#66bb6a', 'text': '10 kr', 'size': 65.09},
+      {'fillStyle': '#e0e0e0', 'text': '0 kr', 'size': 65.09},
+      {'fillStyle': '#42a5f5', 'text': '5 kr', 'size': 65.09},
+      {'fillStyle': '#e0e0e0', 'text': '0 kr', 'size': 65.09},
+      {'fillStyle': '#66bb6a', 'text': '10 kr', 'size': 65.09},
+      {'fillStyle': '#e0e0e0', 'text': '0 kr', 'size': 65.09},
+      {'fillStyle': '#ffeb3b', 'text': '20 kr', 'size': 65.09}
     ];
 
     const theWheel = new Winwheel({
@@ -84,9 +89,9 @@
       'numSegments': segments.length,
       'outerRadius': 200,
       'segments': segments,
-      'textFontFamily': 'Arial',
-      'textFontSize': 14,
-      'textFillStyle': '#ffffff',
+      'textFontFamily': 'Poppins',
+      'textFontSize': 16,
+      'textFillStyle': '#333',
       'animation': {
         'type': 'spinToStop',
         'duration': 12,
