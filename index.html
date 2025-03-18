@@ -2,45 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Spin & Win | LecToGo</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel@master/Winwheel.min.js"></script>
   <style>
-    body {
+    html, body {
       text-align: center;
       font-family: 'Poppins', Arial, sans-serif;
       background-color: #f4f7fa;
       margin: 0;
       padding: 0;
-      overflow-x: hidden;
+      overflow: hidden;
+      height: 100%;
     }
     h1 {
       color: #333;
-      margin-top: 20px;
+      margin-top: 15px;
+      font-size: 1.5rem;
     }
     .canvas-container {
-      width: 100%;
-      max-width: 500px;
-      margin: 40px auto;
+      width: 90%;
+      max-width: 350px;
+      margin: 10px auto;
     }
     #canvas {
       width: 100%;
       height: auto;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
       border-radius: 50%;
     }
     .spin-btn {
       background-color: #3b82f6;
       color: white;
-      padding: 15px 30px;
+      padding: 12px 25px;
       border: none;
       border-radius: 50px;
-      font-size: 18px;
-      margin-top: 20px;
+      font-size: 16px;
+      margin-top: 15px;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
       transition: transform 0.1s;
     }
     .spin-btn:hover {
@@ -50,20 +52,18 @@
       transform: scale(0.95);
     }
     .result {
-      margin-top: 20px;
-      font-size: 20px;
+      margin-top: 10px;
+      font-size: 16px;
       color: #000;
     }
     .pointer {
       width: 0;
       height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-top: 25px solid #333;
-      position: relative;
-      top: 45px;
-      margin: 0 auto;
-      filter: drop-shadow(0px 3px 3px rgba(0,0,0,0.2));
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 20px solid #333;
+      margin: 10px auto;
+      filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
     }
   </style>
 </head>
@@ -71,18 +71,18 @@
   <h1>🎉 Snurra & Vinn!</h1>
   <div class="pointer"></div>
   <div class="canvas-container">
-    <canvas id="canvas" width="500" height="500"></canvas>
+    <canvas id="canvas" width="350" height="350"></canvas>
   </div>
   <button class="spin-btn" onclick="spin()">🎯 Snurra Nu</button>
   <div class="result" id="result"></div>
 
   <script>
     const segments = [
-      {'fillStyle': '#e0e0e0', 'text': '0 kr'},
-      {'fillStyle': '#42a5f5', 'text': '5 kr'},
-      {'fillStyle': '#66bb6a', 'text': '10 kr'},
-      {'fillStyle': '#ffeb3b', 'text': '20 kr'},
-      {'fillStyle': '#ff5252', 'text': '100 kr'}
+      {'fillStyle': '#bbdefb', 'text': '0 kr'},
+      {'fillStyle': '#90caf9', 'text': '5 kr'},
+      {'fillStyle': '#64b5f6', 'text': '10 kr'},
+      {'fillStyle': '#42a5f5', 'text': '20 kr'},
+      {'fillStyle': '#2196f3', 'text': '100 kr'}
     ];
 
     const probabilities = [0.4, 0.3, 0.2, 0.095, 0.005];
@@ -90,15 +90,15 @@
     const theWheel = new Winwheel({
       'canvasId': 'canvas',
       'numSegments': segments.length,
-      'outerRadius': 200,
+      'outerRadius': 170,
       'segments': segments,
       'textFontFamily': 'Poppins',
-      'textFontSize': 16,
+      'textFontSize': 14,
       'textFillStyle': '#333',
       'animation': {
         'type': 'spinToStop',
-        'duration': 12,
-        'spins': 8,
+        'duration': 10,
+        'spins': 5,
         'direction': 'clockwise',
         'callbackFinished': function (indicatedSegment) {
           const resultDiv = document.getElementById('result');
