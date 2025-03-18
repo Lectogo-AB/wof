@@ -19,7 +19,7 @@
       margin-top: 20px;
     }
     #canvas {
-      margin-top: 20px;
+      margin-top: 40px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       border-radius: 50%;
     }
@@ -45,13 +45,12 @@
     .pointer {
       width: 0;
       height: 0;
-      border-top: 15px solid transparent;
-      border-bottom: 15px solid transparent;
-      border-left: 30px solid #555;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #555;
+      margin: 0 auto;
       position: relative;
-      top: 250px;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 35px;
       filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.4));
     }
   </style>
@@ -65,19 +64,19 @@
 
   <script>
     const segments = [
+      {'fillStyle': '#00C851', 'text': '100 kr', 'size': 1},
       {'fillStyle': 'gray', 'text': '0 kr'},
       {'fillStyle': 'blue', 'text': '10 kr'},
-      {'fillStyle': 'blue', 'text': '10 kr'},
+      {'fillStyle': 'gray', 'text': '0 kr'},
       {'fillStyle': 'blue', 'text': '10 kr'},
       {'fillStyle': 'gray', 'text': '0 kr'},
       {'fillStyle': 'orange', 'text': '20 kr'},
       {'fillStyle': 'gray', 'text': '0 kr'},
       {'fillStyle': 'blue', 'text': '10 kr'},
       {'fillStyle': 'gray', 'text': '0 kr'},
+      {'fillStyle': 'blue', 'text': '10 kr'},
       {'fillStyle': 'gray', 'text': '0 kr'},
-      {'fillStyle': 'purple', 'text': '40 kr'},
-      {'fillStyle': 'gray', 'text': '0 kr'},
-      {'fillStyle': 'green', 'text': '100 kr', 'size': 2}
+      {'fillStyle': 'blue', 'text': '10 kr'}
     ];
 
     const theWheel = new Winwheel({
@@ -90,7 +89,7 @@
       'textFillStyle': '#ffffff',
       'animation': {
         'type': 'spinToStop',
-        'duration': 10,
+        'duration': 12,
         'spins': 5,
         'direction': 'clockwise',
         'callbackFinished': function (indicatedSegment) {
@@ -99,48 +98,6 @@
         }
       }
     });
-
-    theWheel.drawSegment = function(index, lastAngle, angle, fillStyle) {
-      const ctx = this.ctx;
-      ctx.save();
-
-      const gradient = ctx.createRadialGradient(
-        this.centerX, this.centerY, 50,
-        this.centerX, this.centerY, this.outerRadius
-      );
-
-      switch(this.segments[index].text) {
-        case '0 kr':
-          gradient.addColorStop(0, '#e0e0e0');
-          gradient.addColorStop(1, '#a8a8a8');
-          break;
-        case '10 kr':
-          gradient.addColorStop(0, '#4d9ef7');
-          gradient.addColorStop(1, '#005de6');
-          break;
-        case '20 kr':
-          gradient.addColorStop(0, '#ffc371');
-          gradient.addColorStop(1, '#ff8800');
-          break;
-        case '40 kr':
-          gradient.addColorStop(0, '#cc89ff');
-          gradient.addColorStop(1, '#7500c7');
-          break;
-        case '100 kr':
-          gradient.addColorStop(0, '#80ff80');
-          gradient.addColorStop(1, '#008000');
-          break;
-      }
-
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.moveTo(this.centerX, this.centerY);
-      ctx.arc(this.centerX, this.centerY, this.outerRadius, lastAngle, angle);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.restore();
-    };
 
     function spin() {
       theWheel.stopAnimation(false);
