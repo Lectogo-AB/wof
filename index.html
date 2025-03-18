@@ -14,13 +14,20 @@
       background-color: #f4f7fa;
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
     }
     h1 {
       color: #333;
       margin-top: 20px;
     }
+    .canvas-container {
+      width: 100%;
+      max-width: 500px;
+      margin: 40px auto;
+    }
     #canvas {
-      margin-top: 40px;
+      width: 100%;
+      height: auto;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
       border-radius: 50%;
     }
@@ -63,7 +70,9 @@
 <body>
   <h1>🎉 Snurra & Vinn!</h1>
   <div class="pointer"></div>
-  <canvas id="canvas" width="500" height="500"></canvas><br>
+  <div class="canvas-container">
+    <canvas id="canvas" width="500" height="500"></canvas>
+  </div>
   <button class="spin-btn" onclick="spin()">🎯 Snurra Nu</button>
   <div class="result" id="result"></div>
 
