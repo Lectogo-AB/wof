@@ -89,7 +89,7 @@
       'animation': {
         'type': 'spinToStop',
         'duration': 12,
-        'spins': 5,
+        'spins': 8,
         'direction': 'clockwise',
         'callbackFinished': function (indicatedSegment) {
           const resultDiv = document.getElementById('result');
@@ -112,7 +112,8 @@
       }
 
       const stopAt = theWheel.getRandomForSegment(segmentIndex);
-
+      theWheel.stopAnimation(false);
+      theWheel.rotationAngle = 0;
       theWheel.animation.stopAngle = stopAt;
       theWheel.startAnimation();
     }
