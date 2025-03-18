@@ -20,6 +20,8 @@
     }
     #canvas {
       margin-top: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border-radius: 50%;
     }
     .spin-btn {
       background-color: #002EFF;
@@ -30,6 +32,7 @@
       font-size: 18px;
       margin-top: 20px;
       cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
     .spin-btn:hover {
       background-color: #001BBB;
@@ -39,10 +42,21 @@
       font-size: 20px;
       color: #000;
     }
+    .pointer {
+      width: 0; 
+      height: 0; 
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid red;
+      margin: 0 auto;
+      position: relative;
+      top: 10px;
+    }
   </style>
 </head>
 <body>
   <h1>Snurra & Vinn!</h1>
+  <div class="pointer"></div>
   <canvas id="canvas" width="500" height="500"></canvas><br>
   <button class="spin-btn" onclick="spin()">🎯 Snurra Nu</button>
   <div class="result" id="result"></div>
@@ -54,7 +68,7 @@
       if (i === 0 || i === 5 || i === 10 || i === 15) {
         segments.push({ 'fillStyle': '#002EFF', 'text': 'Free Rental' });
       } else {
-        segments.push({ 'fillStyle': '#CCCCCC', 'text': 'Try Again' });
+        segments.push({ 'fillStyle': '#7f8fa6', 'text': 'Try Again' });
       }
     }
 
@@ -68,8 +82,8 @@
       'textFillStyle': '#ffffff',
       'animation': {
         'type': 'spinToStop',
-        'duration': 5,
-        'spins': 8,
+        'duration': 8, // Spins slower
+        'spins': 4, // Fewer spins for smoother feel
         'direction': 'clockwise',
         'callbackFinished': function (indicatedSegment) {
           const resultDiv = document.getElementById('result');
