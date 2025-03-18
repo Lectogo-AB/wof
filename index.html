@@ -62,43 +62,46 @@
   <div class="result" id="result"></div>
 
   <script>
-    const segments = [];
-    // Define 20 segments: 4 wins, 16 try agains
-    for (let i = 0; i < 20; i++) {
-      if (i === 0 || i === 5 || i === 10 || i === 15) {
-        segments.push({ 'fillStyle': '#002EFF', 'text': 'Free Rental' });
-      } else {
-        segments.push({ 'fillStyle': '#7f8fa6', 'text': 'Try Again' });
-      }
-    }
+    const segments = [
+      { 'fillStyle': '#CCCCCC', 'text': '0 kr' },
+      { 'fillStyle': '#002EFF', 'text': '10 kr' },
+      { 'fillStyle': '#002EFF', 'text': '10 kr' },
+      { 'fillStyle': '#002EFF', 'text': '10 kr' },
+      { 'fillStyle': '#CCCCCC', 'text': '0 kr' },
+      { 'fillStyle': '#FFA500', 'text': '20 kr' },
+      { 'fillStyle': '#CCCCCC', 'text': '0 kr' },
+      { 'fillStyle': '#002EFF', 'text': '10 kr' },
+      { 'fillStyle': '#CCCCCC', 'text': '0 kr' },
+      { 'fillStyle': '#CCCCCC', 'text': '0 kr' },
+      { 'fillStyle': '#800080', 'text': '40 kr' },
+      { 'fillStyle': '#CCCCCC', 'text': '0 kr' },
+      // Small jackpot segment
+      { 'fillStyle': '#00C851', 'text': '100 kr', 'size': 2 } // Very small segment
+    ];
 
     const theWheel = new Winwheel({
       'canvasId': 'canvas',
-      'numSegments': 20,
+      'numSegments': segments.length,
       'outerRadius': 200,
       'segments': segments,
       'textFontFamily': 'Arial',
-      'textFontSize': 16,
+      'textFontSize': 14,
       'textFillStyle': '#ffffff',
       'animation': {
         'type': 'spinToStop',
-        'duration': 8, // Spins slower
-        'spins': 4, // Fewer spins for smoother feel
+        'duration': 10, // Slower spin
+        'spins': 5,
         'direction': 'clockwise',
         'callbackFinished': function (indicatedSegment) {
           const resultDiv = document.getElementById('result');
-          if (indicatedSegment.text === 'Free Rental') {
-            resultDiv.innerHTML = "🎉 Du vann en gratis hyrning! Försök igen om 24h.";
-          } else {
-            resultDiv.innerHTML = "Tyvärr! Försök igen om 24h.";
-          }
+          resultDiv.innerHTML = `🎉 Du vann: ${indicatedSegment.text}! Använd inom 24 timmar.`;
         }
       }
     });
 
     function spin() {
-      theWheel.stopAnimation(false);  // Reset
-      theWheel.rotationAngle = 0;     // Start from same point
+      theWheel.stopAnimation(false);
+      theWheel.rotationAngle = 0;
       theWheel.startAnimation();
     }
   </script>
