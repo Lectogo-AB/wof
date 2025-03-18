@@ -78,14 +78,16 @@
 
   <script>
     const segments = [
+      {'fillStyle': '#42a5f5', 'text': '5 kr'},
+      {'fillStyle': '#f4511e', 'text': '100 kr'},
+      {'fillStyle': '#1e88e5', 'text': '10 kr'},
       {'fillStyle': '#90caf9', 'text': '0 kr'},
       {'fillStyle': '#42a5f5', 'text': '5 kr'},
-      {'fillStyle': '#1e88e5', 'text': '10 kr'},
-      {'fillStyle': '#ffb300', 'text': '20 kr'},
-      {'fillStyle': '#f4511e', 'text': '100 kr'}
+      {'fillStyle': '#ffb300', 'text': '20 kr'}
     ];
 
-    const probabilities = [0.4, 0.3, 0.2, 0.095, 0.005];
+    const probabilities = [0.25, 0.05, 0.15, 0.4, 0.1, 0.05]; // Adjusted: 25% 5 kr, 5% 100 kr, etc.
+
     const theWheel = new Winwheel({
       'canvasId': 'canvas',
       'numSegments': segments.length,
@@ -105,7 +107,17 @@
 
     function getUserId() {
       const params = new URLSearchParams(window.location.search);
-      return params.get('user_id') || 'guest';
+      let id = params.get('user_id');
+      if (!id) {
+        // fallback: store random id
+        if (!localStorage.getItem('userId')) {
+          id = 'user-' + Date.now();
+          localStorage.setItem('userId', id);
+        } else {
+          id = localStorage.getItem('userId');
+        }
+      }
+      return id;
     }
 
     function canSpin() {
@@ -113,7 +125,7 @@
       if (!lastSpin) return true;
       const now = new Date().getTime();
       const diff = now - lastSpin;
-      return diff > 86400000;
+      return diff > 86400000; // 24h
     }
 
     function updateCountdown() {
@@ -161,11 +173,18 @@
         resultDiv.innerHTML = `😔 Tyvärr blev det ingen vinst den här gången - men prova igen om 24 timmar.`;
       } else {
         const userId = getUserId();
-        const category = indicatedSegment.text === '5 kr' ? 1 : indicatedSegment.text === '10 kr' ? 2 : indicatedSegment.text === '20 kr' ? 3 : 4;
+        let category;
+        switch(indicatedSegment.text) {
+          case '5 kr': category = 1; break;
+          case '10 kr': category = 2; break;
+          case '20 kr': category = 3; break;
+          case '100 kr': category = 4; break;
+        }
+
         fetch(`https://script.google.com/macros/s/AKfycbxr5XUG3TRzFUk8oHV-KFw4m9ivxWPYOUFMbUn9MoV-2JYKykcL9OjiBbREfIZ2XkiBLg/exec?value_category=${category}&user_id=${userId}`)
           .then(response => response.json())
           .then(data => {
-            resultDiv.innerHTML = `🎉 Du vann: ${indicatedSegment.text}! Din kod: ${data.code}. Använd inom 24 timmar.`;
+            resultDiv.innerHTML = `🎉 Du vann: ${indicatedSegment.text}!<br/>Din kod: <strong>${data.code}</strong><br/>Använd inom 24 timmar.`;
           })
           .catch(error => {
             resultDiv.innerHTML = '⚠️ Fel vid hämtning av kod.';
