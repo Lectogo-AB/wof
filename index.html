@@ -79,11 +79,11 @@
   <script>
     const segments = [
       {'fillStyle': '#42a5f5', 'text': '5 kr'},
-      {'fillStyle': '#f4511e', 'text': '100 kr'},
+      {'fillStyle': '#4caf50', 'text': '100 kr'},
       {'fillStyle': '#1e88e5', 'text': '10 kr'},
       {'fillStyle': '#90caf9', 'text': '0 kr'},
       {'fillStyle': '#42a5f5', 'text': '5 kr'},
-      {'fillStyle': '#ffb300', 'text': '20 kr'}
+      {'fillStyle': '#ff9800', 'text': '20 kr'}
     ];
 
     const probabilities = [0.25, 0.05, 0.15, 0.4, 0.1, 0.05]; // Adjusted: 25% 5 kr, 5% 100 kr, etc.
@@ -135,7 +135,7 @@
       const hours = Math.floor((diff % 86400000) / 3600000);
       const minutes = Math.floor((diff % 3600000) / 60000);
       const seconds = Math.floor((diff % 60000) / 1000);
-      document.getElementById('result').innerHTML = `⏰ Nästa spin om: ${hours}t ${minutes}m ${seconds}s`;
+      document.getElementById('result').innerHTML = `⏰ Du kan snurra hjulet igen om: ${hours}t ${minutes}m ${seconds}s`;
     }
 
     if (!canSpin()) {
