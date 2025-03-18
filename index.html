@@ -69,20 +69,14 @@
 
   <script>
     const segments = [
-      {'fillStyle': '#ff5252', 'text': '100 kr', 'size': 4},
-      {'fillStyle': '#e0e0e0', 'text': '0 kr', 'size': 65.09},
-      {'fillStyle': '#42a5f5', 'text': '5 kr', 'size': 65.09},
-      {'fillStyle': '#e0e0e0', 'text': '0 kr', 'size': 65.09},
-      {'fillStyle': '#42a5f5', 'text': '5 kr', 'size': 65.09},
-      {'fillStyle': '#e0e0e0', 'text': '0 kr', 'size': 65.09},
-      {'fillStyle': '#66bb6a', 'text': '10 kr', 'size': 65.09},
-      {'fillStyle': '#e0e0e0', 'text': '0 kr', 'size': 65.09},
-      {'fillStyle': '#42a5f5', 'text': '5 kr', 'size': 65.09},
-      {'fillStyle': '#e0e0e0', 'text': '0 kr', 'size': 65.09},
-      {'fillStyle': '#66bb6a', 'text': '10 kr', 'size': 65.09},
-      {'fillStyle': '#e0e0e0', 'text': '0 kr', 'size': 65.09},
-      {'fillStyle': '#ffeb3b', 'text': '20 kr', 'size': 65.09}
+      {'fillStyle': '#e0e0e0', 'text': '0 kr'},
+      {'fillStyle': '#42a5f5', 'text': '5 kr'},
+      {'fillStyle': '#66bb6a', 'text': '10 kr'},
+      {'fillStyle': '#ffeb3b', 'text': '20 kr'},
+      {'fillStyle': '#ff5252', 'text': '100 kr'}
     ];
+
+    const probabilities = [0.4, 0.3, 0.2, 0.095, 0.005];
 
     const theWheel = new Winwheel({
       'canvasId': 'canvas',
@@ -105,8 +99,21 @@
     });
 
     function spin() {
-      theWheel.stopAnimation(false);
-      theWheel.rotationAngle = 0;
+      let rand = Math.random();
+      let cumulativeProbability = 0;
+      let segmentIndex = 0;
+
+      for (let i = 0; i < probabilities.length; i++) {
+        cumulativeProbability += probabilities[i];
+        if (rand < cumulativeProbability) {
+          segmentIndex = i + 1;
+          break;
+        }
+      }
+
+      const stopAt = theWheel.getRandomForSegment(segmentIndex);
+
+      theWheel.animation.stopAngle = stopAt;
       theWheel.startAnimation();
     }
   </script>
