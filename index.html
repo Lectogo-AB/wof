@@ -68,7 +68,7 @@
   </style>
 </head>
 <body>
-  <h1>🎉 Snurra & Vinn!</h1>
+  <h1>🎉 Få laddkrediter varje dag – Snurra & vinn!</h1>
   <div class="pointer"></div>
   <div class="canvas-container">
     <canvas id="canvas" width="350" height="350"></canvas>
@@ -184,7 +184,7 @@
         fetch(`https://script.google.com/macros/s/AKfycbxr5XUG3TRzFUk8oHV-KFw4m9ivxWPYOUFMbUn9MoV-2JYKykcL9OjiBbREfIZ2XkiBLg/exec?value_category=${category}&user_id=${userId}`)
           .then(response => response.json())
           .then(data => {
-            resultDiv.innerHTML = `🎉 Du vann: ${indicatedSegment.text}!<br/>Din kod: <strong>${data.code}</strong><br/>Använd inom 24 timmar.`;
+            resultDiv.innerHTML = `🎉 Du vann: ${indicatedSegment.text}!<br/> Din kod: <strong>${data.code}</strong><br/> Aktivera koden i appen nu – gäller endast i 1 timme!`;
           })
           .catch(error => {
             resultDiv.innerHTML = '⚠️ Fel vid hämtning av kod.';
