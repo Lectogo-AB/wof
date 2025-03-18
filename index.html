@@ -78,11 +78,11 @@
 
   <script>
     const segments = [
-      {'fillStyle': '#bbdefb', 'text': '0 kr'},
-      {'fillStyle': '#90caf9', 'text': '5 kr'},
-      {'fillStyle': '#64b5f6', 'text': '10 kr'},
-      {'fillStyle': '#42a5f5', 'text': '20 kr'},
-      {'fillStyle': '#2196f3', 'text': '100 kr'}
+      {'fillStyle': '#90caf9', 'text': '0 kr'},
+      {'fillStyle': '#42a5f5', 'text': '5 kr'},
+      {'fillStyle': '#1e88e5', 'text': '10 kr'},
+      {'fillStyle': '#ffb300', 'text': '20 kr'},
+      {'fillStyle': '#f4511e', 'text': '100 kr'}
     ];
 
     const probabilities = [0.4, 0.3, 0.2, 0.095, 0.005];
@@ -107,7 +107,37 @@
       }
     });
 
+    function canSpin() {
+      const lastSpin = localStorage.getItem('lastSpin');
+      if (!lastSpin) return true;
+
+      const now = new Date().getTime();
+      const diff = now - lastSpin;
+
+      return diff > 86400000;
+    }
+
+    function updateCountdown() {
+      const lastSpin = localStorage.getItem('lastSpin');
+      const now = new Date().getTime();
+      const diff = 86400000 - (now - lastSpin);
+
+      const hours = Math.floor((diff % (86400000)) / (3600000));
+      const minutes = Math.floor((diff % (3600000)) / (60000));
+      const seconds = Math.floor((diff % (60000)) / 1000);
+
+      document.getElementById('result').innerHTML = `⏰ Försök igen om ${hours}t ${minutes}m ${seconds}s`;
+    }
+
     function spin() {
+      if (!canSpin()) {
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        return;
+      }
+
+      localStorage.setItem('lastSpin', new Date().getTime());
+
       let rand = Math.random();
       let cumulativeProbability = 0;
       let segmentIndex = 0;
