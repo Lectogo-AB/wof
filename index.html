@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wheel of Fortune</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel@master/Winwheel.min.js"></script>
+</head>
+<body style="text-align:center;">
+  <h1>Spin & Win!</h1>
+  <canvas id="canvas" width="500" height="500"></canvas><br><br>
+  <button onclick="spin()">🎯 SPIN</button>
+
+  <script>
+    const theWheel = new Winwheel({
+      'canvasId': 'canvas',
+      'numSegments': 6,
+      'outerRadius': 200,
+      'segments': [
+        { 'fillStyle': '#eae56f', 'text': '10 kr Rabatt' },
+        { 'fillStyle': '#89f26e', 'text': 'Gratis hyrning' },
+        { 'fillStyle': '#7de6ef', 'text': '50 bonuspoäng' },
+        { 'fillStyle': '#e7706f', 'text': 'Tävlingsticket' },
+        { 'fillStyle': '#f9a602', 'text': '20 kr rabatt' },
+        { 'fillStyle': '#ff4c68', 'text': 'Golden Day!' }
+      ],
+      'animation': {
+        'type': 'spinToStop',
+        'duration': 5,
+        'spins': 8,
+        'callbackFinished': function(indicatedSegment) {
+          alert("Du vann: " + indicatedSegment.text);
+        }
+      }
+    });
+    function spin() {
+      theWheel.startAnimation();
+    }
+  </script>
+</body>
+</html>
