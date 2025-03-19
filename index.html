@@ -137,6 +137,9 @@
       }
     });
 
+    let selectedSegmentText = '';
+    let preloadedCode = '';
+
     function getUserId() {
       const params = new URLSearchParams(window.location.search);
       let id = params.get('user_id');
@@ -187,6 +190,28 @@
           break;
         }
       }
+      selectedSegmentText = segments[segmentIndex - 1].text;
+
+      if (selectedSegmentText !== '0 kr') {
+        const userId = getUserId();
+        let category;
+        switch(selectedSegmentText) {
+          case '5 kr': category = 1; break;
+          case '10 kr': category = 2; break;
+          case '20 kr': category = 3; break;
+          case '100 kr': category = 4; break;
+        }
+
+        fetch(`https://script.google.com/macros/s/AKfycbxr5XUG3TRzFUk8oHV-KFw4m9ivxWPYOUFMbUn9MoV-2JYKykcL9OjiBbREfIZ2XkiBLg/exec?value_category=${category}&user_id=${userId}`)
+          .then(response => response.json())
+          .then(data => {
+            preloadedCode = data.code;
+          })
+          .catch(error => {
+            console.log('Fel vid hämtning av kod.');
+          });
+      }
+
       const stopAt = theWheel.getRandomForSegment(segmentIndex);
       theWheel.stopAnimation(false);
       theWheel.rotationAngle = 0;
@@ -199,23 +224,7 @@
       if (indicatedSegment.text === '0 kr') {
         resultDiv.innerHTML = `😔 Tyvärr blev det ingen vinst den här gången - prova igen imorgon!`;
       } else {
-        const userId = getUserId();
-        let category;
-        switch(indicatedSegment.text) {
-          case '5 kr': category = 1; break;
-          case '10 kr': category = 2; break;
-          case '20 kr': category = 3; break;
-          case '100 kr': category = 4; break;
-        }
-
-        fetch(`https://script.google.com/macros/s/AKfycbxr5XUG3TRzFUk8oHV-KFw4m9ivxWPYOUFMbUn9MoV-2JYKykcL9OjiBbREfIZ2XkiBLg/exec?value_category=${category}&user_id=${userId}`)
-          .then(response => response.json())
-          .then(data => {
-            resultDiv.innerHTML = `🎉 Du vann: ${indicatedSegment.text}!<br/> Din kod: <strong id="promoCode">${data.code}</strong><br/><button class="copy-btn" onclick="copyCode()">📋 Kopiera koden</button><div id="copyMessage"></div><br/>Aktivera koden i appen nu – gäller endast i 1 timme!`;
-          })
-          .catch(error => {
-            resultDiv.innerHTML = '⚠️ Fel vid hämtning av kod.';
-          });
+        resultDiv.innerHTML = `🎉 Du vann: ${indicatedSegment.text}!<br/> Din kod: <strong id="promoCode">${preloadedCode}</strong><br/><button class="copy-btn" onclick="copyCode()">📋 Kopiera koden</button><div id="copyMessage"></div><br/>Aktivera koden i appen nu – gäller endast i 1 timme!`;
       }
     }
 
