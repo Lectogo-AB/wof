@@ -95,12 +95,6 @@
       color: green;
       font-size: 14px;
     }
-    #loading {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #555;
-      display: none;
-    }
   </style>
 </head>
 <body>
@@ -111,7 +105,6 @@
     <canvas id="canvas" width="350" height="350"></canvas>
   </div>
   <button class="spin-btn" onclick="spin()">🎯 Snurra hjulet</button>
-  <div id="loading">🔄 Hämtar din kod...</div>
   <div class="result" id="result"></div>
 
   <script>
@@ -187,9 +180,6 @@
       const today = new Date().toISOString().split('T')[0];
       localStorage.setItem('lastSpinDate', today);
 
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('result').innerHTML = '';
-
       let rand = Math.random();
       let cumulativeProbability = 0;
       let segmentIndex = 0;
@@ -203,7 +193,6 @@
       selectedSegmentText = segments[segmentIndex - 1].text;
 
       if (selectedSegmentText !== '0 kr') {
-        document.getElementById('loading').style.display = 'block';
         const userId = getUserId();
         let category;
         switch(selectedSegmentText) {
@@ -217,11 +206,9 @@
           .then(response => response.json())
           .then(data => {
             preloadedCode = data.code;
-            document.getElementById('loading').style.display = 'none';
           })
           .catch(error => {
             console.log('Fel vid hämtning av kod.');
-            document.getElementById('loading').style.display = 'none';
           });
       }
 
