@@ -8,7 +8,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel@master/Winwheel.min.js"></script>
   <style>
-    /* Your previous CSS */
     html, body {
       text-align: center;
       font-family: 'Poppins', Arial, sans-serif;
@@ -143,7 +142,6 @@
     let selectedSegmentText = '';
     let preloadedCode = '';
 
-    // Retrieve User ID or create a new one if not exists
     function getUserId() {
       const params = new URLSearchParams(window.location.search);
       let id = params.get('user_id');
@@ -177,15 +175,11 @@
     }
 
     function spin() {
-      const userId = getUserId();
-      const today = new Date().toISOString().split('T')[0];
-
-      // If the user has already spun today, show a message
       if (!canSpin()) {
         updateMessage();
         return;
       }
-
+      const today = new Date().toISOString().split('T')[0];
       localStorage.setItem('lastSpinDate', today);
 
       let rand = Math.random();
@@ -201,6 +195,7 @@
       selectedSegmentText = segments[segmentIndex - 1].text;
 
       if (selectedSegmentText !== '0 kr') {
+        const userId = getUserId();
         let category;
         switch(selectedSegmentText) {
           case '5 kr': category = 1; break;
@@ -209,14 +204,13 @@
           case '100 kr': category = 4; break;
         }
 
-        // Send spin result and userId to Google Apps Script
-        fetch(`https://script.google.com/macros/s/AKfycbzmrulgxbuxKcs6GRzAAiUwq5-qjpKbfkB6ZoI65BrMhY_sqG9ElyL7eW1SKvYLpI1oig/exec?value_category=${category}&user_id=${userId}`)
+        fetch(`https://script.google.com/macros/s/AKfycbxr5XUG3TRzFUk8oHV-KFw4m9ivxWPYOUFMbUn9MoV-2JYKykcL9OjiBbREfIZ2XkiBLg/exec?value_category=${category}&user_id=${userId}`)
           .then(response => response.json())
           .then(data => {
             preloadedCode = data.code;
           })
           .catch(error => {
-            console.log('Error fetching code.');
+            console.log('Fel vid hämtning av kod.');
           });
       }
 
@@ -225,14 +219,6 @@
       theWheel.rotationAngle = 0;
       theWheel.animation.stopAngle = stopAt;
       theWheel.startAnimation();
-
-      // Log spin to Google Sheets
-      fetch(`https://script.google.com/macros/s/AKfycbzmrulgxbuxKcs6GRzAAiUwq5-qjpKbfkB6ZoI65BrMhY_sqG9ElyL7eW1SKvYLpI1oig/exec?userId=${userId}&result=${selectedSegmentText}&day=${today}`)
-        .then(response => response.json())
-        .then(data => {
-          console.log('Spin logged:', data);
-        })
-        .catch(error => console.error('Error:', error));
     }
 
     function handleResult(indicatedSegment) {
