@@ -16,6 +16,7 @@
       padding-top: 20px;
       overflow: hidden;
       height: 100%;
+      position: relative;
     }
     h1 {
       color: #333;
@@ -65,9 +66,21 @@
       margin: 10px auto;
       filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
     }
+    .back-arrow {
+      position: absolute;
+      top: 20px;
+      left: 15px;
+      font-size: 28px;
+      color: #333;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      cursor: pointer;
+      z-index: 100;
+    }
   </style>
 </head>
 <body>
+  <div class="back-arrow" onclick="goBack()">&lt;</div>
   <h1>🎉 Snurra & vinn laddkrediter varje dag!</h1>
   <div class="pointer"></div>
   <div class="canvas-container">
@@ -86,7 +99,7 @@
       {'fillStyle': '#008F4C', 'text': '20 kr'}
     ];
 
-    const probabilities = [0.22, 0.02, 0.28, 0.20, 0.23, 0.05]; 
+    const probabilities = [0.22, 0.02, 0.28, 0.20, 0.23, 0.05];
 
     const theWheel = new Winwheel({
       'canvasId': 'canvas',
@@ -121,34 +134,30 @@
     }
 
     function canSpin() {
-      const lastSpin = localStorage.getItem('lastSpin');
-      if (!lastSpin) return true;
-      const now = new Date().getTime();
-      const diff = now - lastSpin;
-      return diff > 86400000; 
+      const lastSpinDate = localStorage.getItem('lastSpinDate');
+      const today = new Date().toISOString().split('T')[0];
+      return lastSpinDate !== today;
     }
 
-    function updateCountdown() {
-      const lastSpin = localStorage.getItem('lastSpin');
-      const now = new Date().getTime();
-      const diff = 86400000 - (now - lastSpin);
-      const hours = Math.floor((diff % 86400000) / 3600000);
-      const minutes = Math.floor((diff % 3600000) / 60000);
-      const seconds = Math.floor((diff % 60000) / 1000);
-      document.getElementById('result').innerHTML = `⏰ Du kan snurra hjulet igen om: ${hours}t ${minutes}m ${seconds}s`;
+    function updateMessage() {
+      const lastSpinDate = localStorage.getItem('lastSpinDate');
+      const today = new Date().toISOString().split('T')[0];
+      if (lastSpinDate === today) {
+        document.getElementById('result').innerHTML = `⏰ Du har redan snurrat idag! Kom tillbaka imorgon efter kl 00:00.`;
+      }
     }
 
     if (!canSpin()) {
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
+      updateMessage();
     }
 
     function spin() {
       if (!canSpin()) {
-        updateCountdown();
+        updateMessage();
         return;
       }
-      localStorage.setItem('lastSpin', new Date().getTime());
+      const today = new Date().toISOString().split('T')[0];
+      localStorage.setItem('lastSpinDate', today);
 
       let rand = Math.random();
       let cumulativeProbability = 0;
@@ -170,7 +179,7 @@
     function handleResult(indicatedSegment) {
       const resultDiv = document.getElementById('result');
       if (indicatedSegment.text === '0 kr') {
-        resultDiv.innerHTML = `😔 Tyvärr blev det ingen vinst den här gången - men prova igen om 24 timmar.`;
+        resultDiv.innerHTML = `😔 Tyvärr blev det ingen vinst den här gången - prova igen imorgon!`;
       } else {
         const userId = getUserId();
         let category;
@@ -190,6 +199,10 @@
             resultDiv.innerHTML = '⚠️ Fel vid hämtning av kod.';
           });
       }
+    }
+
+    function goBack() {
+      window.history.back();
     }
   </script>
 </body>
