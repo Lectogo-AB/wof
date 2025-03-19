@@ -77,6 +77,19 @@
       cursor: pointer;
       z-index: 100;
     }
+    .copy-btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .copy-btn:active {
+      transform: scale(0.95);
+    }
   </style>
 </head>
 <body>
@@ -193,12 +206,19 @@
         fetch(`https://script.google.com/macros/s/AKfycbxr5XUG3TRzFUk8oHV-KFw4m9ivxWPYOUFMbUn9MoV-2JYKykcL9OjiBbREfIZ2XkiBLg/exec?value_category=${category}&user_id=${userId}`)
           .then(response => response.json())
           .then(data => {
-            resultDiv.innerHTML = `🎉 Du vann: ${indicatedSegment.text}!<br/> Din kod: <strong>${data.code}</strong><br/> Aktivera koden i appen nu – gäller endast i 1 timme!`;
+            resultDiv.innerHTML = `🎉 Du vann: ${indicatedSegment.text}!<br/> Din kod: <strong id="promoCode">${data.code}</strong><br/><button class="copy-btn" onclick="copyCode()">📋 Kopiera koden</button><br/>Aktivera koden i appen nu – gäller endast i 1 timme!`;
           })
           .catch(error => {
             resultDiv.innerHTML = '⚠️ Fel vid hämtning av kod.';
           });
       }
+    }
+
+    function copyCode() {
+      const code = document.getElementById('promoCode').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        alert('Koden kopierad!');
+      });
     }
 
     function goBack() {
