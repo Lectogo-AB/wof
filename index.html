@@ -90,6 +90,11 @@
     .copy-btn:active {
       transform: scale(0.95);
     }
+    #copyMessage {
+      margin-top: 8px;
+      color: green;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -206,7 +211,7 @@
         fetch(`https://script.google.com/macros/s/AKfycbxr5XUG3TRzFUk8oHV-KFw4m9ivxWPYOUFMbUn9MoV-2JYKykcL9OjiBbREfIZ2XkiBLg/exec?value_category=${category}&user_id=${userId}`)
           .then(response => response.json())
           .then(data => {
-            resultDiv.innerHTML = `🎉 Du vann: ${indicatedSegment.text}!<br/> Din kod: <strong id="promoCode">${data.code}</strong><br/><button class="copy-btn" onclick="copyCode()">📋 Kopiera koden</button><br/>Aktivera koden i appen nu – gäller endast i 1 timme!`;
+            resultDiv.innerHTML = `🎉 Du vann: ${indicatedSegment.text}!<br/> Din kod: <strong id="promoCode">${data.code}</strong><br/><button class="copy-btn" onclick="copyCode()">📋 Kopiera koden</button><div id="copyMessage"></div><br/>Aktivera koden i appen nu – gäller endast i 1 timme!`;
           })
           .catch(error => {
             resultDiv.innerHTML = '⚠️ Fel vid hämtning av kod.';
@@ -217,7 +222,11 @@
     function copyCode() {
       const code = document.getElementById('promoCode').innerText;
       navigator.clipboard.writeText(code).then(() => {
-        alert('Koden kopierad!');
+        const msg = document.getElementById('copyMessage');
+        msg.innerText = '✔️ Koden är kopierad!';
+        setTimeout(() => {
+          msg.innerText = '';
+        }, 2000);
       });
     }
 
