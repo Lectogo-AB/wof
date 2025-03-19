@@ -86,7 +86,7 @@
       {'fillStyle': '#008F4C', 'text': '20 kr'}
     ];
 
-    const probabilities = [0.25, 0.05, 0.15, 0.4, 0.1, 0.05];
+    const probabilities = [0.25, 0.05, 0.15, 0.4, 0.1, 0.05]; // Adjusted: 25% 5 kr, 5% 100 kr, etc.
 
     const theWheel = new Winwheel({
       'canvasId': 'canvas',
@@ -109,6 +109,7 @@
       const params = new URLSearchParams(window.location.search);
       let id = params.get('user_id');
       if (!id) {
+        // fallback: store random id
         if (!localStorage.getItem('userId')) {
           id = 'user-' + Date.now();
           localStorage.setItem('userId', id);
@@ -124,7 +125,7 @@
       if (!lastSpin) return true;
       const now = new Date().getTime();
       const diff = now - lastSpin;
-      return diff > 86400000;
+      return diff > 86400000; // 24h
     }
 
     function updateCountdown() {
@@ -168,36 +169,22 @@
 
     function handleResult(indicatedSegment) {
       const resultDiv = document.getElementById('result');
-      const userId = getUserId();
-      const prize = indicatedSegment.text;
-
-      // 1️⃣ Log spin to Sheet2
-      fetch('https://script.google.com/macros/s/AKfycbxr5XUG3TRzFUk8oHV-KFw4m9ivxWPYOUFMbUn9MoV-2JYKykcL9OjiBbREfIZ2XkiBLg/exec?value_category=${category}&user_id=${userId}', {
-        method: 'POST',
-        body: JSON.stringify({
-          user_id: userId,
-          prize: prize
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      // 2️⃣ Handle if win or not
-      if (prize === '0 kr') {
+      if (indicatedSegment.text === '0 kr') {
         resultDiv.innerHTML = `😔 Tyvärr blev det ingen vinst den här gången - men prova igen om 24 timmar.`;
       } else {
+        const userId = getUserId();
         let category;
-        switch(prize) {
+        switch(indicatedSegment.text) {
           case '5 kr': category = 1; break;
           case '10 kr': category = 2; break;
           case '20 kr': category = 3; break;
           case '100 kr': category = 4; break;
         }
+
         fetch(`https://script.google.com/macros/s/AKfycbxr5XUG3TRzFUk8oHV-KFw4m9ivxWPYOUFMbUn9MoV-2JYKykcL9OjiBbREfIZ2XkiBLg/exec?value_category=${category}&user_id=${userId}`)
           .then(response => response.json())
           .then(data => {
-            resultDiv.innerHTML = `🎉 Du vann: ${prize}!<br/> Din kod: <strong>${data.code}</strong><br/> Aktivera koden i appen nu – gäller endast i 1 timme!`;
+            resultDiv.innerHTML = `🎉 Du vann: ${indicatedSegment.text}!<br/> Din kod: <strong>${data.code}</strong><br/> Aktivera koden i appen nu – gäller endast i 1 timme!`;
           })
           .catch(error => {
             resultDiv.innerHTML = '⚠️ Fel vid hämtning av kod.';
