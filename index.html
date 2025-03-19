@@ -86,7 +86,7 @@
       {'fillStyle': '#008F4C', 'text': '20 kr'}
     ];
 
-    const probabilities = [0.25, 0.02, 0.15, 0.28, 0.25, 0.05]; // Adjusted: 25% 5 kr, 5% 100 kr, etc.
+    const probabilities = [0.22, 0.02, 0.28, 0.20, 0.23, 0.05]; 
 
     const theWheel = new Winwheel({
       'canvasId': 'canvas',
@@ -110,7 +110,6 @@
       const params = new URLSearchParams(window.location.search);
       let id = params.get('user_id');
       if (!id) {
-        // fallback: store random id
         if (!localStorage.getItem('userId')) {
           id = 'user-' + Date.now();
           localStorage.setItem('userId', id);
@@ -126,7 +125,7 @@
       if (!lastSpin) return true;
       const now = new Date().getTime();
       const diff = now - lastSpin;
-      return diff > 86400000; // 24h
+      return diff > 86400000; 
     }
 
     function updateCountdown() {
